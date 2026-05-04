@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinella — Fredric Brown</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --verde: #2D6A4F;
+    --verde-chiaro: #95D5B2;
+    --verde-sfondo: #f0faf5;
+    --grigio: #4a4a4a;
+    --bordo: #ddd;
+    --testo: #1a1a1a;
+    --accent: #1B4332;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: #faf9f6;
+    color: var(--testo);
+    padding: 0 0 80px;
+    font-size: 18px;
+    line-height: 1.9;
+  }
+
+  .header {
+    background: var(--verde);
+    color: white;
+    padding: 40px 32px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+  }
+
+  .header-meta {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    opacity: .7;
+    margin-bottom: 10px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .header-autore {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    opacity: .8;
+    font-style: italic;
+  }
+
+  .header-info {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .info-chip {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    background: rgba(255,255,255,.15);
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+
+  .container {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .sezione { margin-top: 48px; }
+
+  .sezione-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sezione-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--verde-chiaro);
+  }
+
+  .testo p {
+    margin-bottom: 22px;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  /* QUIZ COMPRENSIONE */
+  .quiz-box {
+    background: white;
+    border: 1px solid var(--bordo);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .quiz-titolo {
+    background: var(--verde);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .quiz-icon {
+    width: 24px; height: 24px;
+    background: rgba(255,255,255,.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+
+  .quiz-domanda {
+    padding: 20px 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .quiz-domanda:last-child { border-bottom: none; padding-bottom: 20px; }
+
+  .domanda-testo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--testo);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .domanda-num-badge {
+    display: inline-block;
+    background: var(--verde-sfondo);
+    color: var(--verde);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .opzioni { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+  .opzione {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--bordo);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    background: white;
+    text-align: left;
+    width: 100%;
+  }
+
+  .opzione:hover:not(:disabled) { border-color: var(--verde-chiaro); background: var(--verde-sfondo); }
+  .opzione.corretta { border-color: #2D6A4F; background: #d8f3dc; color: #1B4332; }
+  .opzione.sbagliata { border-color: #e63946; background: #fff0f0; color: #c1121f; }
+
+  .opzione-lettera {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .feedback-mc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    display: none;
+  }
+
+  .feedback-mc.show { display: block; }
+  .feedback-mc.ok { background: #d8f3dc; color: #1B4332; }
+  .feedback-mc.no { background: #fff0f0; color: #c1121f; }
+
+  .punteggio-box {
+    background: var(--verde-sfondo);
+    border: 1px solid var(--verde-chiaro);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--verde);
+    display: none;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .punteggio-box.show { display: flex; }
+  .punteggio-num { font-size: 28px; font-weight: 700; }
+
+  /* STRATEGIA */
+  .strategia-box {
+    background: white;
+    border: 1px solid var(--bordo);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .strategia-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .strategia-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .s3 { background: #2D6A4F; }
+  .s5 { background: #1e6091; }
+  .s10 { background: #7b2d8b; }
+
+  .strategia-titolo strong {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .strategia-titolo span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .strategia-intro {
+    padding: 16px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fafafa;
+    font-style: italic;
+  }
+
+  .strategia-domanda {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .strategia-domanda:last-child { border-bottom: none; }
+
+  .strategia-domanda-testo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .area-risposta {
+    width: 100%;
+    min-height: 90px;
+    border: 1px solid var(--bordo);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--testo);
+    resize: vertical;
+    background: #fafafa;
+    transition: border-color .15s;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .area-risposta:focus {
+    outline: none;
+    border-color: var(--verde);
+    background: white;
+  }
+
+  .area-risposta::placeholder {
+    color: #bbb;
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  /* BOTTONE FEEDBACK AI */
+  .btn-ai {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: var(--verde);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .15s;
+  }
+
+  .btn-ai:hover { background: var(--accent); }
+  .btn-ai:disabled { background: #aaa; cursor: not-allowed; }
+
+  /* FEEDBACK AI */
+  .ai-feedback {
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
+  }
+
+  .ai-feedback.show { display: block; }
+
+  .ai-feedback-header {
+    background: var(--verde-sfondo);
+    border: 1px solid var(--verde-chiaro);
+    border-bottom: none;
+    padding: 8px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--verde);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ai-feedback-corpo {
+    background: white;
+    border: 1px solid var(--verde-chiaro);
+    border-top: none;
+    padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #333;
+  }
+
+  .ai-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #888;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .dot-anim {
+    display: flex; gap: 4px;
+  }
+
+  .dot-anim span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--verde);
+    animation: bounce 1.2s infinite;
+  }
+
+  .dot-anim span:nth-child(2) { animation-delay: .2s; }
+  .dot-anim span:nth-child(3) { animation-delay: .4s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: .4; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* PADLET */
+  .padlet-box {
+    background: var(--verde);
+    border-radius: 12px;
+    padding: 28px 24px;
+    color: white;
+    margin-top: 8px;
+  }
+
+  .padlet-titolo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .padlet-sottotitolo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    opacity: .75;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .padlet-consegna {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    line-height: 1.7;
+    background: rgba(255,255,255,.1);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    border-left: 3px solid var(--verde-chiaro);
+  }
+
+  .padlet-consegna strong {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    opacity: .7;
+    margin-bottom: 8px;
+  }
+
+  .timer-display {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: .05em;
+    margin: 12px 0;
+  }
+
+  .timer-btn { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  .btn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 20px; border-radius: 6px; border: none; cursor: pointer; transition: all .15s; }
+  .btn-white { background: white; color: var(--verde); }
+  .btn-white:hover { background: var(--verde-chiaro); }
+  .btn-outline { background: transparent; color: white; border: 1px solid rgba(255,255,255,.4); }
+  .btn-outline:hover { background: rgba(255,255,255,.1); }
+
+  .padlet-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: var(--verde);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all .15s;
+  }
+
+  .padlet-link:hover { background: var(--verde-chiaro); color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 30px; }
+    body { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <div class="header-meta">Laboratorio di Narrativa — Fantascienza</div>
+    <h1>Sentinella</h1>
+    <div class="header-autore">Fredric Brown</div>
+    <div class="header-info">
+      <span class="info-chip">Titolo originale: Sentry</span>
+      <span class="info-chip">Prima pubblicazione: 1954</span>
+      <span class="info-chip">Lingua originale: inglese</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TESTO -->
+  <div class="sezione">
+    <div class="sezione-label">Il racconto</div>
+    <div class="testo">
+      <p>Era bagnato fradicio e coperto di fango e aveva fame e freddo ed era lontano cinquantamila anni-luce da casa.</p>
+      <p>Un sole straniero dava una gelida luce azzurra e la gravità, doppia di quella cui era abituato, faceva d'ogni movimento un'agonia di fatica.</p>
+      <p>Ma dopo decine di migliaia d'anni quest'angolo di guerra non era cambiato. Era comodo per quelli dell'aviazione, con le loro astronavi tirate a lucido e le loro superarmi; ma quando si arrivava al dunque, toccava ancora al soldato di terra, alla fanteria, prendere la posizione e tenerla, col sangue, palmo a palmo. Come questo fottuto pianeta di una stella mai sentita nominare finché non ce lo avevano sbarcato. E adesso era suolo sacro perché c'era arrivato anche il nemico. Il nemico, l'unica altra razza intelligente della Galassia… crudeli, schifosi, ripugnanti <strong>mostri</strong>.</p>
+      <p>Il primo contatto era avvenuto vicino al centro della Galassia, dopo la lenta e difficile colonizzazione di qualche migliaio di pianeti; ed era stata la guerra, subito. Quelli avevano cominciato a sparare senza nemmeno tentare un accordo, una soluzione pacifica.</p>
+      <p>E adesso, pianeta per pianeta, bisognava combattere, coi denti e con le unghie.</p>
+      <p>Era bagnato fradicio e coperto di fango e aveva fame e freddo, e il giorno era livido e spazzato da un vento violento che gli faceva male agli occhi. Ma i nemici tentavano d'infiltrarsi e ogni avamposto era vitale.</p>
+      <p>Stava all'erta, il fucile pronto. Lontano cinquantamila anni-luce dalla patria, a combattere su un mondo straniero e a chiedersi se ce l'avrebbe mai fatta a riportare a casa la pelle.</p>
+      <p>E allora vide uno di loro strisciare verso di lui. Prese la mira e fece fuoco.</p>
+      <p>Il nemico emise quel verso strano, agghiacciante, che tutti loro facevano, poi non si mosse più.</p>
+      <p>Il verso e la vista del cadavere lo fecero rabbrividire. Molti, col passare del tempo, s'erano abituati, non ci facevano più caso, ma lui no. Erano creature troppo schifose, con solo due braccia e due gambe, quella pelle d'un bianco nauseante, e senza squame.</p>
+    </div>
+  </div>
+
+  <!-- QUIZ COMPRENSIONE -->
+  <div class="sezione">
+    <div class="sezione-label">È tutto chiaro? — Comprensione del testo</div>
+    <div class="quiz-box">
+      <div class="quiz-titolo">
+        <div class="quiz-icon">?</div>
+        Domande a risposta multipla — scegli la risposta corretta
+      </div>
+
+      <div class="quiz-domanda">
+        <div class="domanda-num-badge">Domanda 1</div>
+        <div class="domanda-testo">Chi è la sentinella del racconto?</div>
+        <div class="opzioni" id="q1">
+          <button class="opzione" onclick="rispondi('q1','A','B')"><span class="opzione-lettera">A</span>Un soldato umano che combatte su un pianeta alieno</button>
+          <button class="opzione" onclick="rispondi('q1','B','B')"><span class="opzione-lettera">B</span>Un soldato alieno che combatte contro gli umani</button>
+          <button class="opzione" onclick="rispondi('q1','C','B')"><span class="opzione-lettera">C</span>Un robot inviato a sorvegliare un avamposto</button>
+          <button class="opzione" onclick="rispondi('q1','D','B')"><span class="opzione-lettera">D</span>Un esploratore spaziale in missione di pace</button>
+        </div>
+        <div class="feedback-mc" id="q1-feedback"></div>
+      </div>
+
+      <div class="quiz-domanda">
+        <div class="domanda-num-badge">Domanda 2</div>
+        <div class="domanda-testo">Cosa sono gli «anni-luce» citati nel racconto?</div>
+        <div class="opzioni" id="q2">
+          <button class="opzione" onclick="rispondi('q2','A','C')"><span class="opzione-lettera">A</span>Anni trascorsi in guerra</button>
+          <button class="opzione" onclick="rispondi('q2','B','C')"><span class="opzione-lettera">B</span>Anni di viaggio nel tempo</button>
+          <button class="opzione" onclick="rispondi('q2','C','C')"><span class="opzione-lettera">C</span>Unità di misura della distanza nello spazio</button>
+          <button class="opzione" onclick="rispondi('q2','D','C')"><span class="opzione-lettera">D</span>Il nome del pianeta dove si svolge la storia</button>
+        </div>
+        <div class="feedback-mc" id="q2-feedback"></div>
+      </div>
+
+      <div class="quiz-domanda">
+        <div class="domanda-num-badge">Domanda 3</div>
+        <div class="domanda-testo">Come viene descritto il «nemico» alla fine del racconto?</div>
+        <div class="opzioni" id="q3">
+          <button class="opzione" onclick="rispondi('q3','A','A')"><span class="opzione-lettera">A</span>Con due braccia, due gambe, pelle bianca e senza squame</button>
+          <button class="opzione" onclick="rispondi('q3','B','A')"><span class="opzione-lettera">B</span>Con sei zampe e un esoscheletro metallico</button>
+          <button class="opzione" onclick="rispondi('q3','C','A')"><span class="opzione-lettera">C</span>Con tentacoli e occhi multipli</button>
+          <button class="opzione" onclick="rispondi('q3','D','A')"><span class="opzione-lettera">D</span>Non viene descritto fisicamente</button>
+        </div>
+        <div class="feedback-mc" id="q3-feedback"></div>
+      </div>
+
+      <div class="quiz-domanda">
+        <div class="domanda-num-badge">Domanda 4</div>
+        <div class="domanda-testo">Perché la sentinella rabbrividisce dopo aver ucciso il nemico?</div>
+        <div class="opzioni" id="q4">
+          <button class="opzione" onclick="rispondi('q4','A','B')"><span class="opzione-lettera">A</span>Perché ha paura di essere scoperta dai nemici</button>
+          <button class="opzione" onclick="rispondi('q4','B','B')"><span class="opzione-lettera">B</span>Perché trova il nemico fisicamente ripugnante</button>
+          <button class="opzione" onclick="rispondi('q4','C','B')"><span class="opzione-lettera">C</span>Perché si pente di aver ucciso</button>
+          <button class="opzione" onclick="rispondi('q4','D','B')"><span class="opzione-lettera">D</span>Perché il freddo del pianeta è insopportabile</button>
+        </div>
+        <div class="feedback-mc" id="q4-feedback"></div>
+      </div>
+
+      <div class="quiz-domanda">
+        <div class="domanda-num-badge">Domanda 5</div>
+        <div class="domanda-testo">Cosa capisci alla fine del racconto che cambia tutto ciò che hai letto prima?</div>
+        <div class="opzioni" id="q5">
+          <button class="opzione" onclick="rispondi('q5','A','C')"><span class="opzione-lettera">A</span>Che la guerra era già finita prima dell'inizio del racconto</button>
+          <button class="opzione" onclick="rispondi('q5','B','C')"><span class="opzione-lettera">B</span>Che la sentinella è in realtà una spia nemica</button>
+          <button class="opzione" onclick="rispondi('q5','C','C')"><span class="opzione-lettera">C</span>Che la sentinella è un alieno e il «nemico» ucciso è un essere umano</button>
+          <button class="opzione" onclick="rispondi('q5','D','C')"><span class="opzione-lettera">D</span>Che la storia si svolge sulla Terra nel futuro</button>
+        </div>
+        <div class="feedback-mc" id="q5-feedback"></div>
+      </div>
+
+      <div class="punteggio-box" id="punteggio-finale">
+        <div class="punteggio-num" id="punteggio-num">0/5</div>
+        <div>
+          <div style="font-weight:600;font-size:15px;font-family:'DM Sans',sans-serif" id="punteggio-msg"></div>
+          <div style="font-size:12px;color:#555;margin-top:2px;font-family:'DM Sans',sans-serif">Passa alle domande sulle strategie di lettura</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRATEGIA 3 -->
+  <div class="sezione">
+    <div class="sezione-label">Strategia 3 — Trama</div>
+    <div class="strategia-box">
+      <div class="strategia-header">
+        <div class="strategia-num s3">3</div>
+        <div class="strategia-titolo">
+          <strong>TADAN! — Il colpo di scena</strong>
+          <span>Strategia di lettura</span>
+        </div>
+      </div>
+      <div class="strategia-intro">Quando leggi, tieni gli occhi aperti per gli indizi che portano al plot twist. Dopo aver trovato il colpo di scena, torna indietro e cerca gli elementi che lo preparavano senza che tu te ne accorgessi.</div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 1</div>
+        <div class="strategia-domanda-testo">Quali elementi del testo ti avevano fatto pensare che la sentinella fosse un soldato umano? Elenca almeno tre dettagli specifici e citali dal testo.</div>
+        <textarea class="area-risposta" id="s3q1" placeholder="Scrivi qui la tua risposta..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s3q1', 'tadan_1')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s3q1-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s3q1-aibody"></div>
+        </div>
+      </div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 2</div>
+        <div class="strategia-domanda-testo">Ora che conosci il finale, rileggi il racconto. Ci sono dettagli che avrebbero potuto farti intuire la verità? Quali? Perché non li avevi notati la prima volta?</div>
+        <textarea class="area-risposta" id="s3q2" placeholder="Scrivi qui la tua risposta..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s3q2', 'tadan_2')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s3q2-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s3q2-aibody"></div>
+        </div>
+      </div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 3</div>
+        <div class="strategia-domanda-testo">Perché secondo te Brown ha scelto di usare il colpo di scena proprio nell'ultima riga? Cosa aggiunge al significato del racconto?</div>
+        <textarea class="area-risposta" id="s3q3" placeholder="Scrivi qui la tua risposta..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s3q3', 'tadan_3')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s3q3-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s3q3-aibody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRATEGIA 5 -->
+  <div class="sezione">
+    <div class="sezione-label">Strategia 5 — Ambientazione</div>
+    <div class="strategia-box">
+      <div class="strategia-header">
+        <div class="strategia-num s5">5</div>
+        <div class="strategia-titolo">
+          <strong>DOVE SIAMO? — Il setting</strong>
+          <span>Strategia di lettura</span>
+        </div>
+      </div>
+      <div class="strategia-intro">Il setting è lo spazio e il tempo in cui si svolge una storia. Osserva come Brown costruisce il pianeta alieno con pochissimi dettagli fisici concreti, senza mai spiegarlo esplicitamente.</div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 1</div>
+        <div class="strategia-domanda-testo">Descrivi il setting di Sentinella: dove siamo, in che epoca? Come lo hai capito? Elenca i dettagli del testo che ti hanno dato queste informazioni senza che Brown le abbia mai dette esplicitamente.</div>
+        <textarea class="area-risposta" id="s5q1" placeholder="Scrivi qui la tua risposta..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s5q1', 'setting_1')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s5q1-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s5q1-aibody"></div>
+        </div>
+      </div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 2</div>
+        <div class="strategia-domanda-testo">Immagina la stessa storia ambientata sulla Terra oggi. Cosa cambierebbe? La storia avrebbe lo stesso impatto? Perché il setting galattico è fondamentale per il significato del racconto?</div>
+        <textarea class="area-risposta" id="s5q2" placeholder="Scrivi qui la tua risposta..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s5q2', 'setting_2')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s5q2-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s5q2-aibody"></div>
+        </div>
+      </div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 3</div>
+        <div class="strategia-domanda-testo">Brown usa dettagli fisici concreti per costruire il pianeta alieno: la luce azzurra, la gravità doppia, il vento, il fango. In che modo questi dettagli sensoriali ti fanno «sentire» il luogo senza bisogno di spiegazioni?</div>
+        <textarea class="area-risposta" id="s5q3" placeholder="Scrivi qui la tua risposta..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s5q3', 'setting_3')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s5q3-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s5q3-aibody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRATEGIA 10 -->
+  <div class="sezione">
+    <div class="sezione-label">Strategia 10 — Stile</div>
+    <div class="strategia-box">
+      <div class="strategia-header">
+        <div class="strategia-num s10">10</div>
+        <div class="strategia-titolo">
+          <strong>UN, DUE, RITMO! — Lo stile</strong>
+          <span>Strategia di lettura</span>
+        </div>
+      </div>
+      <div class="strategia-intro">Il ritmo di un testo dipende dalla lunghezza delle frasi e dall'uso delle congiunzioni. Brown usa prevalentemente frasi brevi collegate dalla «e» — un ritmo paratattico che crea velocità e suspense.</div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 1</div>
+        <div class="strategia-domanda-testo">Osserva la prima frase del racconto: «Era bagnato fradicio e coperto di fango e aveva fame e freddo ed era lontano cinquantamila anni-luce da casa». Quante congiunzioni «e» ci sono? Che effetto produce questo ritmo su chi legge?</div>
+        <textarea class="area-risposta" id="s10q1" placeholder="Scrivi qui la tua risposta..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s10q1', 'ritmo_1')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s10q1-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s10q1-aibody"></div>
+        </div>
+      </div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 2</div>
+        <div class="strategia-domanda-testo">Trova nel testo un momento in cui le frasi si accorciano molto e diventano quasi telegrafiche. Trascrivile qui. Perché pensi che Brown abbia scelto frasi così brevi proprio in quel punto?</div>
+        <textarea class="area-risposta" id="s10q2" placeholder="Scrivi qui la tua risposta..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s10q2', 'ritmo_2')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s10q2-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s10q2-aibody"></div>
+        </div>
+      </div>
+
+      <div class="strategia-domanda">
+        <div class="domanda-num-badge">Domanda 3</div>
+        <div class="strategia-domanda-testo">Prova a riscrivere le prime due frasi del racconto usando frasi lunghe e subordinate. Poi dimmi: che effetto produce la tua versione rispetto all'originale di Brown?</div>
+        <textarea class="area-risposta" id="s10q3" placeholder="Scrivi qui la tua riscrittura e poi il commento..."></textarea>
+        <button class="btn-ai" onclick="feedbackAI('s10q3', 'ritmo_3')">✦ Chiedi un feedback</button>
+        <div class="ai-feedback" id="s10q3-aifeedback">
+          <div class="ai-feedback-header">✦ Feedback</div>
+          <div class="ai-feedback-corpo" id="s10q3-aibody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PADLET COINVOLGIMENTO ATTIVO -->
+  <div class="sezione">
+    <div class="sezione-label">Coinvolgimento attivo — 5 minuti</div>
+    <div class="padlet-box">
+      <div class="padlet-titolo">Ora prova tu — sul Padlet</div>
+      <div class="padlet-sottotitolo">Condivisione con la classe • 5 minuti</div>
+
+      <div class="padlet-consegna">
+        <strong>La consegna</strong>
+        Brown costruisce un mondo futuro senza mai spiegarlo — solo attraverso dettagli fisici concreti. Prova anche tu: scrivi <strong>una sola frase</strong> che faccia capire che siamo nel futuro senza usare mai le parole <em>futuro, spazio, robot, alieno, tecnologia</em>. Solo un dettaglio quotidiano e concreto. Poi incollala sul Padlet condiviso.
+      </div>
+
+      <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:16px 18px;margin-bottom:20px">
+        <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:10px">Timer — 5 minuti</div>
+        <div class="timer-display" id="timer">05:00</div>
+        <div class="timer-btn">
+          <button class="btn btn-white" onclick="startTimer()">▶ Avvia</button>
+          <button class="btn btn-outline" onclick="resetTimer()">↺ Reset</button>
+        </div>
+      </div>
+
+      <a href="https://padlet.com/profzanini/storia-del-futuro-243juvpdua4lzm90" target="_blank" class="padlet-link">🟡 Apri il Padlet della classe</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── QUIZ COMPRENSIONE ──
+let risposteDate = {};
+let punteggio = 0;
+
+function rispondi(quiz, scelta, corretta) {
+  if (risposteDate[quiz]) return;
+  risposteDate[quiz] = scelta;
+
+  const bottoni = document.querySelectorAll(`#${quiz} .opzione`);
+  const lettere = ['A','B','C','D'];
+
+  bottoni.forEach((btn, i) => {
+    btn.disabled = true;
+    if (lettere[i] === corretta) btn.classList.add('corretta');
+    else if (lettere[i] === scelta && scelta !== corretta) btn.classList.add('sbagliata');
+  });
+
+  const feedback = document.getElementById(`${quiz}-feedback`);
+  feedback.classList.add('show');
+
+  if (scelta === corretta) {
+    punteggio++;
+    feedback.classList.add('ok');
+    feedback.textContent = '✓ Corretto!';
+  } else {
+    feedback.classList.add('no');
+    feedback.textContent = `✗ La risposta corretta era ${corretta}.`;
+  }
+
+  if (Object.keys(risposteDate).length === 5) {
+    const box = document.getElementById('punteggio-finale');
+    box.classList.add('show');
+    document.getElementById('punteggio-num').textContent = `${punteggio}/5`;
+    const msg = punteggio === 5 ? 'Perfetto — hai compreso tutto il racconto!'
+      : punteggio >= 3 ? 'Bene — rileggi i passaggi delle domande sbagliate.'
+      : 'Rileggi il racconto con attenzione prima di procedere.';
+    document.getElementById('punteggio-msg').textContent = msg;
+  }
+}
+
+// ── FEEDBACK AI ──
+const PROMPTS = {
+  tadan_1: `Sei un insegnante di italiano gentile e incoraggiante che lavora con studenti di prima superiore (14 anni). Lo studente ha risposto a questa domanda sul racconto "Sentinella" di Fredric Brown: "Quali elementi del testo ti avevano fatto pensare che la sentinella fosse un soldato umano? Elenca almeno tre dettagli specifici e citali dal testo." Dai un feedback breve (3-5 frasi) che: 1) riconosca cosa c'è di buono nella risposta, 2) suggerisca cosa potrebbe aggiungere o approfondire, 3) faccia una domanda stimolante per andare più in profondità. Parla direttamente allo studente in modo caldo e diretto. Non dare mai la risposta completa.`,
+  tadan_2: `Sei un insegnante di italiano gentile e incoraggiante che lavora con studenti di prima superiore (14 anni). Lo studente ha risposto a questa domanda sul racconto "Sentinella" di Fredric Brown: "Ora che conosci il finale, ci sono dettagli che avrebbero potuto farti intuire la verità? Quali? Perché non li avevi notati la prima volta?" Dai un feedback breve (3-5 frasi) che riconosca i punti forti, suggerisca un approfondimento e ponga una domanda stimolante. Non dare la risposta completa.`,
+  tadan_3: `Sei un insegnante di italiano gentile e incoraggiante che lavora con studenti di prima superiore (14 anni). Lo studente ha risposto a questa domanda: "Perché Brown ha scelto il colpo di scena nell'ultima riga? Cosa aggiunge al significato del racconto?" Dai un feedback breve (3-5 frasi) che valorizzi il ragionamento, suggerisca di pensare al tema dell'empatia e del nemico, e ponga una domanda aperta. Non dare la risposta.`,
+  setting_1: `Sei un insegnante di italiano gentile che lavora con studenti di prima superiore. La domanda era: "Descrivi il setting di Sentinella: dove siamo, in che epoca? Come lo hai capito? Elenca i dettagli del testo che ti hanno dato queste informazioni senza che Brown le abbia mai dette esplicitamente." Dai un feedback breve (3-5 frasi): valorizza i dettagli citati, suggerisci di cercare quelli sensoriali se non li ha nominati, fai una domanda. Non dare la risposta.`,
+  setting_2: `Sei un insegnante di italiano gentile che lavora con studenti di prima superiore. La domanda era: "Immagina la stessa storia sulla Terra oggi. Cosa cambierebbe? Perché il setting galattico è fondamentale?" Dai un feedback breve (3-5 frasi) che valorizzi il ragionamento, spinga a pensare al tema della guerra e del nemico in relazione al setting, e faccia una domanda. Non dare la risposta.`,
+  setting_3: `Sei un insegnante di italiano gentile che lavora con studenti di prima superiore. La domanda era: "In che modo i dettagli sensoriali di Brown ti fanno sentire il luogo senza spiegazioni?" Dai un feedback breve (3-5 frasi) che valorizzi la risposta, suggerisca di identificare quale senso viene usato di più e perché, e ponga una domanda. Non dare la risposta.`,
+  ritmo_1: `Sei un insegnante di italiano gentile che lavora con studenti di prima superiore. La domanda era: "Nella prima frase di Sentinella, quante congiunzioni e ci sono? Che effetto produce questo ritmo?" Dai un feedback breve (3-5 frasi). Se lo studente ha contato le e, valorizzalo. Suggerisci di pensare all'effetto di accumulo e stanchezza che produce. Fai una domanda. Non dare la risposta.`,
+  ritmo_2: `Sei un insegnante di italiano gentile che lavora con studenti di prima superiore. La domanda era: "Trova nel testo un momento in cui le frasi diventano telegrafiche. Perché Brown ha scelto frasi così brevi in quel punto?" Dai un feedback breve (3-5 frasi). Valorizza la citazione se presente, suggerisci il collegamento tra ritmo breve e azione, fai una domanda. Non dare la risposta.`,
+  ritmo_3: `Sei un insegnante di italiano gentile che lavora con studenti di prima superiore. La domanda era: riscrivere le prime due frasi con frasi lunghe e subordinate, poi commentare la differenza. Dai un feedback breve (3-5 frasi). Valorizza il tentativo di riscrittura, commenta la differenza di effetto che lo studente ha notato, spingilo a pensare perché Brown ha scelto la paratassi. Non dare la risposta.`
+};
+
+async function feedbackAI(campoId, tipoPrompt) {
+  const campo = document.getElementById(campoId);
+  const risposta = campo.value.trim();
+
+  if (risposta.length < 10) {
+    alert('Scrivi prima la tua risposta — almeno qualche riga!');
+    return;
+  }
+
+  const feedbackDiv = document.getElementById(`${campoId}-aifeedback`);
+  const bodyDiv = document.getElementById(`${campoId}-aibody`);
+  const btn = campo.nextElementSibling;
+
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  feedbackDiv.classList.add('show');
+  bodyDiv.innerHTML = `<div class="ai-loading"><div class="dot-anim"><span></span><span></span><span></span></div> Sto leggendo la tua risposta…</div>`;
+
+  const systemPrompt = PROMPTS[tipoPrompt];
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [
+          { role: 'user', content: `Risposta dello studente: "${risposta}"` }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    const testo = data.content?.[0]?.text || 'Non riesco a generare un feedback in questo momento.';
+    bodyDiv.innerHTML = testo.replace(/\n/g, '<br>');
+    btn.textContent = '✦ Chiedi un altro feedback';
+    btn.disabled = false;
+
+  } catch (err) {
+    bodyDiv.innerHTML = 'Errore di connessione. Riprova tra un momento.';
+    btn.textContent = '✦ Riprova';
+    btn.disabled = false;
+  }
+}
+
+// ── TIMER ──
+let timerInterval = null;
+let secondiRimasti = 300;
+
+function aggiornaDisplay() {
+  const m = Math.floor(secondiRimasti / 60).toString().padStart(2,'0');
+  const s = (secondiRimasti % 60).toString().padStart(2,'0');
+  document.getElementById('timer').textContent = `${m}:${s}`;
+}
+
+function startTimer() {
+  if (timerInterval) return;
+  timerInterval = setInterval(() => {
+    if (secondiRimasti <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('timer').textContent = 'TEMPO!';
+      return;
+    }
+    secondiRimasti--;
+    aggiornaDisplay();
+  }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  secondiRimasti = 300;
+  aggiornaDisplay();
+}
+</script>
+</body>
+</html>
